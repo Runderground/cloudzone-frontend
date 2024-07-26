@@ -1,0 +1,97 @@
+.register_container {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 5rem;
+}
+.register_logo {
+  width: 400px;
+  height: 400px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-radius: 10px;
+}
+
+.formContainer {
+  display: flex;
+  flex-direction: column;
+  padding: 2rem;
+  background: #201928;
+  border-radius: 12px;
+  width: 500px;
+  box-shadow: 0 0 20px #110D15;
+}
+.formContainer span {
+  margin-bottom: 2rem;
+  margin-top: 1rem;
+}
+
+.userCheck {
+  position: relative;
+  top: 10px;
+  font-size: 2rem;
+}
+
+.checkyes {
+  color: limegreen;
+}
+
+.checkno {
+  color: indianred;
+}
+
+.formContainer h3 {
+  text-align: center;
+  margin-bottom: 12px;
+  color: #EACDFF;
+}
+
+.formContainer a {
+  color: #D9A5FF;
+  text-decoration: none;
+}
+
+.form button {
+  position: relative;
+  top: 5px;
+  border: none;
+  padding: 4px 5px;
+  background: transparent;
+  border-radius: .3rem;
+  margin-left: 4px;
+  cursor: pointer;
+}
+
+.form button>svg{
+  font-size: 25px;
+  color: #C26CFF;
+}
+
+.InputForm input{
+  margin-block: 12px;
+  width: 83%;
+}
+
+@media (max-width: 768px) {
+  .register_container {
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+  .register_logo {
+    width: 250px;
+    height: 250px;
+    margin-bottom: 3rem;
+  }
+  .formContainer {
+    width: 370px;
+    transform: scale(1.2);
+  }
+
+  .InputForm input{
+    width: 75%;
+  }
+}
