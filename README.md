@@ -1,7 +1,7 @@
 <img align="right" src="https://visitor-badge.laobi.icu/badge?page_id=cloudzone-backend" alt="Visitors"/>
 
 <h1 align="center">
-  ☁️ Cloudzone Front-End ☁️
+  ☁️ CloudZone Front-End ☁️
 </h1>
 
 <h3 align="center">
