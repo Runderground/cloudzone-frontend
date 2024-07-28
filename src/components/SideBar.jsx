@@ -9,14 +9,22 @@ import {
   BsXSquare,
   BsBellFill,
   BsGrid,
+  BsCloudUploadFill,
+  BsPatchPlusFill,
+  BsPlusCircle,
+  BsPlus,
+  BsX,
+  BsPaperclip,
+  BsEmojiSmileFill
 } from "react-icons/bs";
 import { RiMenu2Fill, RiLogoutBoxLine } from "react-icons/ri";
 import { useState, useContext, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../contexto/AuthContext";
-import Modal from "./Modal.jsx";
+import { Modal } from "./Modal/index.jsx";
 import axios from "axios";
-import Input from "./forms/Input.jsx";
+import Picker from '@emoji-mart/react'
+import EmojiPicker from 'emoji-picker-react'
 const baseURL = `${import.meta.env.VITE_API_URL}api/`;
 
 export default function SideBar() {
@@ -28,6 +36,8 @@ export default function SideBar() {
   const [files, setFiles] = useState();
   const [postContent, setPostContent] = useState("");
   const [userProfile, setUserProfile] = useState("");
+  const [emojiOpen, setEmojiOpen] = useState(false)
+  const [midiaOpen, setMidiaOpen] = useState(false)
   useEffect(() => {
     async function fetchData() {
       const { data } = await axios.get(`${baseURL}users/${user.username}`);
@@ -41,7 +51,6 @@ export default function SideBar() {
     setIsOpen(!isOpen);
   };
   const openUserBar = () => {
-    console.log("OIOI");
     setIsUserOpen(!isUserOpen);
   };
   const openModal = () => {
@@ -49,6 +58,10 @@ export default function SideBar() {
     setIsUserOpen(false);
     setIsModalOpen(!isModalOpen);
   };
+
+  const openEmoji = () => {
+    setEmojiOpen(!emojiOpen)
+  }
 
   // Funcionalidade do Logout
   const navigate = useNavigate();
@@ -82,7 +95,7 @@ export default function SideBar() {
     <>
       {/* Modal para realizar posts ( Sujeito a mudanças )*/}
       
-      <Modal isOpen={isModalOpen} setClose={() => setIsModalOpen(!isModalOpen)}>
+      {/* <Modal isOpen={isModalOpen} setClose={() => setIsModalOpen(!isModalOpen)}>
         <h2>Criar um post</h2>
         <Input
           handleChange={(e) => setPostContent(e.target.value)}
@@ -97,7 +110,33 @@ export default function SideBar() {
         <button id={style.createPostBtn} onClick={createPost}>
           Enviar
         </button>
-      </Modal>
+      </Modal> */}
+
+      <Modal.Root isOpen={isModalOpen}  setClose={() => setIsModalOpen(!isModalOpen)}>
+        <Modal.Icon Icon={BsCloudPlusFill}/>
+        <Modal.Content text="Criar um Post"/>
+        <Modal.ModalTextArea placeholder="O que está pensando hoje?" value={postContent} onChange={(e) => setPostContent(e.target.value)}/>
+        <div>
+          <div style={{display: 'flex'}}>
+          <div onClick={openEmoji} className={`${style.modalBtn} ${emojiOpen ? style.activeBtn : ''}`} style={{borderTopLeftRadius: '6px', borderBottomLeftRadius: '6px', marginRight: '1px'}}>
+            <BsEmojiSmileFill style={{alignSelf: 'center'}}/>
+          </div>
+          <div className={`${style.modalBtn} ${midiaOpen ? style.activeBtn : ''}`} style={{borderTopRightRadius: '6px', borderBottomRightRadius: '6px'}}>
+            <BsPaperclip style={{alignSelf: 'center'}}/>
+          </div>
+          </div>
+          {emojiOpen && <Picker
+            locale={'pt'} 
+            onEmojiSelect={(e) => {
+            setPostContent(postContent + e.native)
+          }}
+            />}
+        </div>
+        <Modal.Actions>
+          <Modal.Action text="Cancelar" onClick={() => {}} bgColor="rgba(0,0,0,.2)" textColor="#DEE0D7"/>
+          <Modal.Action text="Criar" onClick={() => {}} bgColor="#529F4B" textColor="#DEE0D7"/>
+        </Modal.Actions>
+      </Modal.Root>
       {/* Modal para realizar posts ( Sujeito a mudanças )*/}
 
       {/* HEADER ( Universal para todos os dispositivos ) */}

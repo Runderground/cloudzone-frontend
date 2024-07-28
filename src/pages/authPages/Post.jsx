@@ -283,10 +283,6 @@ export default function Post() {
                   <span id={style.delete_reply}><BsTrash2Fill/> Deletar</span>
                       </>) : ''}
                   </div>
-                  <div className={style.reply_the_reply_box}>
-                    <textarea onInput={(e) => setRTRText({text: e.target.value})} value={RTRText.text} maxLength={280} className={style.RTR_input} placeholder={`Responder @${r.author.username}`} />
-                    <BsSendFill className={style.send_RTR}/>
-                  </div>
                   {r.replies.length > 0 ? (<p id={style.seemore}>Ver respostas</p>) : ''}
                 </div>
                 </div>

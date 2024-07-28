@@ -199,8 +199,11 @@ color: #575062
 .replyAP_options{
   display: flex;
   justify-content: start;
+  padding: 8px;
+  border-radius: 5px;
   gap: 10px;
   user-select: none;
+  background: rgb(17, 18, 25, .1);
 }
 
 .reply_likes {
@@ -260,7 +263,7 @@ color: #575062
   display: flex;
   align-items: center;
   font-weight: 400;
-  padding: 1px 3px;
+  padding: 1px 5px;
   font-size: 12px;
   background: rgba(114, 120, 255, .7);
   border-radius: 5px;
