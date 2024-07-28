@@ -14,6 +14,7 @@ import { AuthContext } from "../../contexto/AuthContext";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
 import "moment/locale/pt";
+import nothingHere from '../../assets/nothing-where.png'
 const baseURL = `${import.meta.env.VITE_API_URL}api/`;
 
 export default function Posts() {
@@ -96,7 +97,7 @@ export default function Posts() {
 
   return (
     <>
-      {posts.map((p, index) => (
+      {posts.length > 0 ? (posts.map((p, index) => (
         <div className={style.post} key={index}>
           <img
             src={`${import.meta.env.VITE_API_URL}profile/${p.author.profilePicture}`}
@@ -177,7 +178,11 @@ export default function Posts() {
             </div>
           </div>
         </div>
-      ))}
+      ))) : (<>
+        <h2 style={{color: 'rgba(114, 120, 255, .2)', marginTop: '.5rem'}}>Não há nenhum post...</h2>
+        <img src={nothingHere} style={{maxHeight: '500px', maxWidth: '500px',alignSelf: 'center', opacity: '.3'}} alt="Não há nenhum post..."/>
+        
+      </>)}
     </>
   );
 }
