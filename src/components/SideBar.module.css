@@ -327,6 +327,24 @@
   background: linear-gradient(to right, rgba(100, 50 ,250), rgba(100, 145 ,250))
 }
 
+
+.midiaUpload_Container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 150px;
+  background: rgba(0,0,0,.2);
+  border: 3px dashed rgba(100, 50 ,250, .5);
+  border-radius: 5px;
+  cursor: pointer;
+  margin-bottom: 1rem;
+}
+
+.inputFile {
+  cursor: pointer;
+}
+
 /*  JS FUNCTION  */
 .active {
   left: 0;

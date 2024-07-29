@@ -59,8 +59,17 @@ export default function SideBar() {
     setIsModalOpen(!isModalOpen);
   };
 
-  const openEmoji = () => {
+  const openEmoji = (openorclose) => {
+    setMidiaOpen(false)
     setEmojiOpen(!emojiOpen)
+    if (openorclose === false) {
+      setEmojiOpen(openorclose)
+    }
+  }
+
+  const openMidia = () => {
+    setEmojiOpen(false)
+    setMidiaOpen(!midiaOpen)
   }
 
   // Funcionalidade do Logout
@@ -115,13 +124,13 @@ export default function SideBar() {
       <Modal.Root isOpen={isModalOpen}  setClose={() => setIsModalOpen(!isModalOpen)}>
         <Modal.Icon Icon={BsCloudPlusFill}/>
         <Modal.Content text="Criar um Post"/>
-        <Modal.ModalTextArea placeholder="O que está pensando hoje?" value={postContent} onChange={(e) => setPostContent(e.target.value)}/>
+        <Modal.ModalTextArea placeholder="O que está pensando hoje?" value={postContent} onChange={(e) => setPostContent(e.target.value)} onFocus={() => openEmoji(false)}/>
         <div>
           <div style={{display: 'flex'}}>
           <div onClick={openEmoji} className={`${style.modalBtn} ${emojiOpen ? style.activeBtn : ''}`} style={{borderTopLeftRadius: '6px', borderBottomLeftRadius: '6px', marginRight: '1px'}}>
             <BsEmojiSmileFill style={{alignSelf: 'center'}}/>
           </div>
-          <div className={`${style.modalBtn} ${midiaOpen ? style.activeBtn : ''}`} style={{borderTopRightRadius: '6px', borderBottomRightRadius: '6px'}}>
+          <div onClick={openMidia} className={`${style.modalBtn} ${midiaOpen ? style.activeBtn : ''}`} style={{borderTopRightRadius: '6px', borderBottomRightRadius: '6px'}}>
             <BsPaperclip style={{alignSelf: 'center'}}/>
           </div>
           </div>
@@ -131,6 +140,16 @@ export default function SideBar() {
             setPostContent(postContent + e.native)
           }}
             />}
+          {midiaOpen && (
+      <div onClick={() => document.querySelector('#inputfile').click()} className={style.midiaUpload_Container}>
+            <input id="inputfile" className={style.inputFile} type="file" hidden/>
+            <div style={{display: 'flex', flexDirection: 'column'}}>
+              <BsCloudUploadFill style={{alignSelf: 'center', fontSize: '3rem', color: 'rgba(114, 120, 255, .3)'}}/>
+              <label style={{color: 'rgba(114, 120, 255, .3)'}}>Clique aqui para dar <strong style={{color: 'rgba(150, 130, 255, .5)'}}>upload</strong></label>
+              <span style={{fontSize: '.8rem', color: 'rgba(120,100,200,.2)'}}>permitimos somente imagens jpg/jpeg/png</span>
+            </div>
+          </div>
+    )}
         </div>
         <Modal.Actions>
           <Modal.Action text="Cancelar" onClick={() => {}} bgColor="rgba(0,0,0,.2)" textColor="#DEE0D7"/>
