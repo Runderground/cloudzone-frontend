@@ -10,9 +10,8 @@ import {
   BsBellFill,
   BsGrid,
   BsCloudUploadFill,
-  BsPatchPlusFill,
-  BsPlusCircle,
-  BsPlus,
+  BsPersonVcardFill,
+  BsPersonFill,
   BsX,
   BsPaperclip,
   BsEmojiSmileFill
@@ -25,6 +24,7 @@ import { Modal } from "./Modal/index.jsx";
 import axios from "axios";
 import Picker from '@emoji-mart/react'
 import EmojiPicker from 'emoji-picker-react'
+import toast from "react-hot-toast";
 const baseURL = `${import.meta.env.VITE_API_URL}api/`;
 
 export default function SideBar() {
@@ -34,10 +34,12 @@ export default function SideBar() {
   const [isUserOpen, setIsUserOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [files, setFiles] = useState();
+  const [images, setImages] = useState([])
   const [postContent, setPostContent] = useState("");
   const [userProfile, setUserProfile] = useState("");
   const [emojiOpen, setEmojiOpen] = useState(false)
   const [midiaOpen, setMidiaOpen] = useState(false)
+  const [uploadProgress, setUploadProgress] = useState(0)
   useEffect(() => {
     async function fetchData() {
       const { data } = await axios.get(`${baseURL}users/${user.username}`);
@@ -81,6 +83,24 @@ export default function SideBar() {
     location.reload();
   };
 
+  const handleImageChange = (e) => {
+    const files = e.target.files
+    setFiles(e.target.files)
+    if(files.length > 4) {
+      toast.error("Você não pode enviar mais de 4 imagens")
+      return
+    }
+    for (let i = 0; i < files?.length; i++) {
+      setImages(prev => [...prev, URL.createObjectURL(files[i])])
+    }
+  }
+
+  const handleFileClick = () => {
+      setImages([])
+      setFiles(null)
+      console.log("Cleaned")
+  }
+
   const createPost = async () => {
     const token = localStorage.getItem("User");
     const parse = JSON.parse(token);
@@ -91,36 +111,33 @@ export default function SideBar() {
     }
     formData.append("text", postContent);
     try {
-      await axios.post(`${baseURL}posts/createpost`, formData, {
+      const {data} = await axios.post(`${baseURL}posts/createpost`, formData, {
         headers: { authorization: jwt },
-      });
-      navigate("/");
-      location.reload();
+        onUploadProgress: (progress) => {
+          setUploadProgress(Math.round((progress.loaded / progress.total) * 100))
+        }
+      })
+      navigate(`/post/${data._id}`)
+      toast.success("Post criado com sucesso")
+      location.reload()
     } catch (err) {
       console.log(err);
     }
   };
+
+  const removeImage = (index) => {
+    if(index < 0) return
+    
+    const filterImages = images.filter((_, i) => i !== index);
+    const filterFiles = Array.from(files).filter((_, i) => i !== index)
+    setImages(filterImages)
+    setFiles(filterFiles)
+    
+    toast.success("Imagem removida ;)")
+  }
   return (
     <>
       {/* Modal para realizar posts ( Sujeito a mudanças )*/}
-      
-      {/* <Modal isOpen={isModalOpen} setClose={() => setIsModalOpen(!isModalOpen)}>
-        <h2>Criar um post</h2>
-        <Input
-          handleChange={(e) => setPostContent(e.target.value)}
-          type="text"
-          placeholder="O que você está pensando?"
-        />
-        <input
-          onChange={(e) => setFiles(e.target.files)}
-          type="file"
-          multiple
-        />
-        <button id={style.createPostBtn} onClick={createPost}>
-          Enviar
-        </button>
-      </Modal> */}
-
       <Modal.Root isOpen={isModalOpen}  setClose={() => setIsModalOpen(!isModalOpen)}>
         <Modal.Icon Icon={BsCloudPlusFill}/>
         <Modal.Content text="Criar um Post"/>
@@ -141,19 +158,41 @@ export default function SideBar() {
           }}
             />}
           {midiaOpen && (
+      <>
       <div onClick={() => document.querySelector('#inputfile').click()} className={style.midiaUpload_Container}>
-            <input id="inputfile" className={style.inputFile} type="file" hidden/>
+            <input id="inputfile" className={style.inputFile} type="file" onClick={handleFileClick} onChange={(e) => handleImageChange(e)} multiple hidden/>
             <div style={{display: 'flex', flexDirection: 'column'}}>
               <BsCloudUploadFill style={{alignSelf: 'center', fontSize: '3rem', color: 'rgba(114, 120, 255, .3)'}}/>
               <label style={{color: 'rgba(114, 120, 255, .3)'}}>Clique aqui para dar <strong style={{color: 'rgba(150, 130, 255, .5)'}}>upload</strong></label>
-              <span style={{fontSize: '.8rem', color: 'rgba(120,100,200,.2)'}}>permitimos somente imagens jpg/jpeg/png</span>
+              <span style={{fontSize: '.8rem', color: 'rgba(120,100,200,.2)'}}>Max 4 imagens * 5MB</span>
             </div>
           </div>
+        <div>
+          {images.length > 0 && (<div className={style.image_preview_container}>
+            {images.map((img,index) => (
+          <div className={style.image_preview_box}>
+            <img key={index} className={style.image_preview} src={img} alt={img}/>
+            <BsX onClick={() => removeImage(index)} className={style.deleteImage}/>
+          </div>
+          ))}
+          </div>)}
+        </div>
+        </>
     )}
         </div>
+        <div className={style.progress_bg} style={{backgroundColor: 'rgba(0,0,0,.1)', width: '100%', height: '8px', marginBottom: '5px', borderRadius: '8px'}}>
+          <div className={style.progress}
+            role='progressbar'
+            aria-valuenow={uploadProgress}
+            aria-valuemin={0}
+            aria-valuemax={100}
+            style={{width: `${uploadProgress}%`, height: '8px', backgroundColor: 'seagreen', borderRadius: '8px', transition: '.4s ease-in-out'}}>
+
+          </div>
+          </div>
         <Modal.Actions>
           <Modal.Action text="Cancelar" onClick={() => {}} bgColor="rgba(0,0,0,.2)" textColor="#DEE0D7"/>
-          <Modal.Action text="Criar" onClick={() => {}} bgColor="#529F4B" textColor="#DEE0D7"/>
+          <Modal.Action text="Criar" onClick={createPost} bgColor="#529F4B" textColor="#DEE0D7"/>
         </Modal.Actions>
       </Modal.Root>
       {/* Modal para realizar posts ( Sujeito a mudanças )*/}
@@ -202,16 +241,19 @@ export default function SideBar() {
                 />
 
                 <div className={style.usernames}>
-                  <p className={style.user_name}>{user.name}</p>
-                  <p className={style.user_username}>@{user.username}</p>
+                  <span className={style.user_name}><BsPersonVcardFill/> {user.name}</span>
+                  <span className={style.user_username}>@{user.username}</span>
                 </div>
               </div>
               <div className={style.user_buttons}>
-                <button className={style.settings}>
+                <button className={style.profile_buttons}>
+                  <BsPersonFill /> Ver Perfil
+                </button>
+                <button className={style.profile_buttons}>
                   <BsGearWideConnected /> Configurações
                 </button>
                 <button onClick={handleLogout} className={style.logout}>
-                  <RiLogoutBoxLine /> Logout
+                  <RiLogoutBoxLine /> Sair
                 </button>
               </div>
             </div>

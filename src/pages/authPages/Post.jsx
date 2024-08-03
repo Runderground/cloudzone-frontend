@@ -21,6 +21,7 @@ import moment from 'moment'
 moment.locale('pt-br')
 
 import {FaCrown} from 'react-icons/fa'
+import ImageSlider from '../../components/ImageSlider'
 
 export default function Post() {
   const { user, userProfile } = useContext(AuthContext)
@@ -94,7 +95,13 @@ export default function Post() {
       parts.push(<span key={"text_rest"}>{rest}</span>);
     }
 
-    return parts;
+    const formattedText = text.split('\n').map((item, index) => (
+      <span key={index}>
+        {item}
+        <br />
+      </span>))
+
+    return formattedText;
   };
 
   const likecountref = useRef([]);
@@ -182,11 +189,14 @@ export default function Post() {
                 )}
               </div>
               <p className={style.content}>{renderTextWithMentions(p.text)}</p>
-              {p.images.length > 0 && (
+              {p.images.length === 1 && (
                 <img
                   className={style.postsMidia}
                   src={`${import.meta.env.VITE_API_URL}posts/${p.images[0].filename}`}
                 />
+              )}
+              {p.images.length > 1 && (
+                <ImageSlider images={p.images}/>
               )}
               <div className={style.options}>
                 <div className={style.likesInfo}>
