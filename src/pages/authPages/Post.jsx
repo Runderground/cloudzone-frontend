@@ -22,6 +22,7 @@ moment.locale('pt-br')
 
 import {FaCrown} from 'react-icons/fa'
 import ImageSlider from '../../components/ImageSlider'
+import Loading from '../../components/Loading'
 
 export default function Post() {
   const { user, userProfile } = useContext(AuthContext)
@@ -252,7 +253,7 @@ export default function Post() {
                 <img
                   src={`${import.meta.env.VITE_API_URL}profile/${userProfile}`}
                   alt="Profile Image"
-                  className={style.author_image}
+                  className={style.author_comment_image}
                 />
                 <div className={style.comment_input}>
                   <textarea onInput={(e) => setComment({text: e.target.value})} value={comment.text} maxLength={280} className={style.Comment_input} placeholder={`Faça um comentário`} />
@@ -260,7 +261,7 @@ export default function Post() {
                 </div>
               </div>
             </div>
-          </div>) : (<p>Carregando...</p>)}
+          </div>) : (<Loading/>)}
           <h2 className={style.commentTitle}>Comentários</h2>
           <div className={style.replies_section}>
             {replies.length > 0 ? (
@@ -297,7 +298,7 @@ export default function Post() {
                 </div>
                 </div>
               ))
-            ) : (<p className={style.no_comments}>Nenhum comentário ainda</p>)}
+            ) : (<span style={{color: 'rgba(150, 150, 255,.2)'}}>Nenhum comentário...</span>)}
           </div>
         </div>
       </Container>

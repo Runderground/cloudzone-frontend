@@ -16,6 +16,7 @@ import moment from "moment";
 import "moment/locale/pt";
 import nothingHere from '../../assets/nothing-where.png'
 import ImageSlider from "../ImageSlider";
+import Loading from "../Loading";
 const baseURL = `${import.meta.env.VITE_API_URL}api/`;
 
 export default function Posts() {
@@ -188,11 +189,9 @@ export default function Posts() {
             </div>
           </div>
         </div>
-      ))) : (<>
-        <h2 style={{color: 'rgba(114, 120, 255, .2)', marginTop: '.5rem'}}>Não há nenhum post...</h2>
-        <img src={nothingHere} style={{maxHeight: '500px', maxWidth: '500px',alignSelf: 'center', opacity: '.3'}} alt="Não há nenhum post..."/>
-        
-      </>)}
+      ))) : (<div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '1rem'}}>
+        <Loading size={"75"} color={"rgba(150, 90, 255)"} speed={"2"}/>
+      </div>)}
     </>
   );
 }
