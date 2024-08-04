@@ -119,7 +119,7 @@ export default function Post() {
       console.log(likecountref.current.innerText);
     }
     try {
-      await axios.patch(`${baseURL}posts/like/${postid}/${user.id}`, null, {
+      await axios.patch(`${import.meta.env.VITE_API_URL}api/posts/like/${postid}/${user.id}`, null, {
         headers: { authorization: jwt },
       });
     } catch (err) {
@@ -261,7 +261,9 @@ export default function Post() {
                 </div>
               </div>
             </div>
-          </div>) : (<Loading/>)}
+          </div>) : (<div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '1rem'}}>
+                      <Loading size={"50"} color={"rgba(150, 90, 255)"} speed={"1.5"}/>
+                    </div>)}
           <h2 className={style.commentTitle}>Comentários</h2>
           <div className={style.replies_section}>
             {replies.length > 0 ? (

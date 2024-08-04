@@ -190,7 +190,7 @@ export default function Posts() {
           </div>
         </div>
       ))) : (<div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '1rem'}}>
-        <Loading size={"75"} color={"rgba(150, 90, 255)"} speed={"2"}/>
+        <Loading size={"50"} color={"rgba(150, 90, 255)"} speed={"2"}/>
       </div>)}
     </>
   );
