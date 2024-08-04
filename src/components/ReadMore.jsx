@@ -1,7 +1,7 @@
 import {useEffect, useState} from 'react'
 import style from '../pages/authPages/Post.module.css'
 
-export default function ReadMore({text, charLimit = 100, paragraphLimit = 2}) {
+export default function ReadMore({text, charLimit = 100, paragraphLimit = 4, className}) {
   const [isExpanded, setIsExpanded] = useState(false)
   const [showButton, setShowButton] = useState(false)
   useEffect(() => {
@@ -10,38 +10,6 @@ export default function ReadMore({text, charLimit = 100, paragraphLimit = 2}) {
       setShowButton(true)
     }
   },[text, charLimit, paragraphLimit])
-  const renderTextWithMentions = (text) => {
-    const mentionRegex = /(@\w+)/gi;
-    let lastIndex = 0;
-    const parts = [];
-    let match;
-    while ((match = mentionRegex.exec(text)) !== null) {
-      const mention = match[0];
-      const mentionStart = match.index;
-      const mentionEnd = mentionStart + mention.length;
-      const mentionText = text.substring(lastIndex, mentionStart);
-      if (mentionText) {
-        parts.push(mentionText);
-      }
-      parts.push(
-        <span key={mention} className={style.mention}>
-          {mention}
-        </span>,
-      );
-      lastIndex = mentionEnd;
-    }
-    const rest = text.substring(lastIndex);
-    if (rest) {
-      parts.push(<span key={"text_rest"}>{rest}</span>);
-    }
-
-    const formattedText = text.split('\n').map((item, index) => (
-      <span key={index}>
-        {item}
-        <br/>
-      </span>))
-    return parts
-  };
   const TextoFormatado = (text) => {
     const mentionRegex = /(@\w+)/gi;
     const regexQuebraDeLinhas = /\n/g;
@@ -64,15 +32,27 @@ export default function ReadMore({text, charLimit = 100, paragraphLimit = 2}) {
       return text
     }
 
-    const visibleText = text?.split('').slice(0, charLimit).join('').split('\n').slice(0, paragraphLimit).join('\n') + '...'
+    const visibleText = text?.split('').slice(0, charLimit).join('').split('\n').slice(0, paragraphLimit).join('\n')
     return visibleText
   }
   return (
-    <div>
+    <div className={className}>
       <p dangerouslySetInnerHTML={{__html: TextoFormatado(renderText())}}>
       </p>
       {showButton && (
-      <button onClick={toggleReadMore}>{isExpanded ? 'Leia menos' : 'Leia mais'}</button>
+      <button style={{
+        border: 'none',
+        background: 'transparent',
+        cursor: 'pointer',
+        color: 'rgba(150, 130, 255)',
+        fontWeight: 'bold',
+        letterSpacing: '.05rem',
+        padding: '1rem 0',
+        textDecoration: 'underline'
+      }}
+        onClick={toggleReadMore}>
+        {isExpanded ? 'Ler menos' : 'Ler mais'}
+      </button>
       )}
     </div>
   )

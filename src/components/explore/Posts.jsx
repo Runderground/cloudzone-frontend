@@ -17,6 +17,7 @@ import "moment/locale/pt";
 import nothingHere from '../../assets/nothing-where.png'
 import ImageSlider from "../ImageSlider";
 import Loading from "../Loading";
+import ReadMore from "../ReadMore";
 const baseURL = `${import.meta.env.VITE_API_URL}api/`;
 
 export default function Posts() {
@@ -127,7 +128,7 @@ export default function Posts() {
                 </div>
               )}
             </div>
-            <p className={style.content}>{renderTextWithMentions(p.text)}</p>
+            <ReadMore className={style.content} text={p.text}/>
             {p.images.length === 1 && (
               <img
                 className={style.postsMidia}
