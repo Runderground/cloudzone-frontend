@@ -8,6 +8,12 @@
   font-family: "Poppins", sans-serif;
 }
 
+.mention {
+  color: rgba(120, 80, 255);
+  font-weight: 500;
+  cursor: pointer
+}
+
 html, body {
   color: #DEE0D7;
   height: 100%;

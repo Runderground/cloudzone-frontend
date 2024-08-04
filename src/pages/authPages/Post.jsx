@@ -23,6 +23,7 @@ moment.locale('pt-br')
 import {FaCrown} from 'react-icons/fa'
 import ImageSlider from '../../components/ImageSlider'
 import Loading from '../../components/Loading'
+import ReadMore from '../../components/ReadMore'
 
 export default function Post() {
   const { user, userProfile } = useContext(AuthContext)
@@ -99,7 +100,7 @@ export default function Post() {
     const formattedText = text.split('\n').map((item, index) => (
       <span key={index}>
         {item}
-        <br />
+        <br/>
       </span>))
 
     return formattedText;
@@ -127,7 +128,11 @@ export default function Post() {
     }
   };
   const comentar = async () => {
-    console.log(cooldown)
+    const isOnlyNewlines = /^[\n]*$/.test(comment.text)
+    if (isOnlyNewlines) {
+      toast.error("Não é permitido comentar apenas com quebras de linha")
+      return
+    }
     if(comment.text === "" || comment.text.length < 2) {
       toast.error("O comentário deve ter pelo menos 2 caracteres!")
       return
@@ -281,7 +286,7 @@ export default function Post() {
                     </div>
                   </div>
                   <div className={style.reply_main}>
-                    <p>{renderTextWithMentions(r.text)}</p>
+                    <ReadMore charLimit={100} paragraphLimit={4} text={r.text}/>
                     <div className={style.reply_likes}>
                     <BsHeart className={style.likeIcon}/>
                     <span id={style.likecounter}>{r.likescount}</span>
